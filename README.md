@@ -67,7 +67,7 @@ Exit code `2` if anything is exposed, `3` if nothing is exposed but something is
 - For each container it runs nginx's own commands: `nginx -v` (version), `nginx -V` (HTTP/2 module) and `nginx -T` (configuration test and dump). When `/proc` shows the master process started with `-c FILE`, that file is used. Comments are ignored when looking for `http2 on;` and `listen ... http2`.
 - In Kubernetes it uses `kubectl exec` on running containers. With `-n`, it also checks ingress controller pods (ingress-nginx, NGINX Ingress Controller) elsewhere in the cluster, because they usually terminate the client's HTTP/2 for that namespace.
 - It lists the namespace's ingress hosts and checks from your machine whether each one negotiates **ALPN h2**.
-- The report is Markdown, with UTC time, who ran it, the kube context and API server, and a `.sha256` file next to it.
+- The report is Markdown, with UTC time, the kube context and API server (no user or machine name), and a `.sha256` file next to it.
 
 It never changes configuration, never reloads nginx and never sends HTTP/2 frames.
 

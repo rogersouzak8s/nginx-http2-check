@@ -260,13 +260,13 @@ $CTRL"; SCOPE="$SCOPE + ingress controller pods"; }
     ;;
   docker)
     command -v docker >/dev/null || { echo "docker not found" >&2; exit 1; }
-    CTXINFO="docker context: $(docker context show 2>/dev/null) | host: $(hostname)"
+    CTXINFO="docker context: $(docker context show 2>/dev/null)"
     if [ ${#ARGS[@]} -gt 0 ]; then for c in "${ARGS[@]}"; do printf '%s\t%s\n' "$c" "$(docker inspect -f '{{.Config.Image}}' "$c" 2>/dev/null)"; done > "$WORK/targets"
     else docker ps --format '{{.Names}}	{{.Image}}' > "$WORK/targets"; fi
     SCOPE="docker containers ($(wc -l < "$WORK/targets" | tr -d ' '))"
     ;;
   local)
-    CTXINFO="host: $(hostname) | $(uname -sr)"
+    CTXINFO="local host, $(uname -sr)"
     printf -- '-\t\n' > "$WORK/targets"; SCOPE="this host"
     ;;
 esac
@@ -298,7 +298,6 @@ report() {
   echo "| --- | --- |"
   echo "| Generated (UTC) | $NOW |"
   echo "| Tool | check-nginx-http2.sh $VERSION |"
-  echo "| Run by | $(id -un 2>/dev/null)@$(hostname) |"
   echo "| Target | $MODE: $SCOPE |"
   echo "| Context | $CTXINFO |"
   echo "| Containers checked | $NT ($NNG with nginx) |"
